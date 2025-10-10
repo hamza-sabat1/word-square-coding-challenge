@@ -7,8 +7,4 @@ The goal is to generate an _n × n_ word square where each row equals its corres
 ---
 
 ### Original Challenge Brief
-The official challenge instructions are included in this repository as:
-
-[`Coding Challenge.pdf`](./Coding%20Challenge.pdf)
-
 (Originally provided as part of a technical task.)
