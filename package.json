@@ -4,7 +4,7 @@
   "description": "This repository contains a JavaScript implementation of the **Word Square Coding Challenge**",
   "main": "wordSquare.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
