@@ -9,7 +9,19 @@ function makeLetterCounts(str) {
   return counts;
 }
 
+function wordFitsBag (word, bag) {
+  const w = normaliseLetters(word);
+  
+  const need = {};
+  for (const ch of w) {
+    need[ch] = (need[ch] || 0) + 1;
+    if ((bag[ch] || 0) < need[ch]) return false;
+  }
+  return true;
+}
+
 module.exports = {
   normaliseLetters,
   makeLetterCounts,
+  wordFitsBag,
 };
