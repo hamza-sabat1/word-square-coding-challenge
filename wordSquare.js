@@ -38,9 +38,25 @@ function filterValidWords(n, bag, lines) {
   return out;
 }
 
+function getNeededPrefix(rows) {
+  if (rows.length === 0) return '';
+
+  const wordLength = rows[0].length;
+  const r = rows.length;
+  if (r >= wordLength) return '';
+
+  let prefix = '';
+  for (let i = 0; i < r; i++) {
+    prefix += rows[i][r];
+  }
+  return prefix;
+}
+
+
 module.exports = {
   normaliseLetters,
   makeLetterCounts,
   wordFitsBag,
   filterValidWords,
+  getNeededPrefix,
 };

@@ -1,4 +1,4 @@
-const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords,} = require('./wordSquare');
+const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix} = require('./wordSquare');
 
 describe('Utility functions for cleaning input letters and generating frequency maps to count instances of letters', () => {
     test('normaliseLetters should convert input to lowercase and remove invalid characters', () => {
@@ -82,3 +82,20 @@ describe('Dictionary filtering to build candidate word set', () => {
   });
 });
 
+describe('getNeededPrefix', () => {
+   test('returns an empty string when there are no rows yet', () => {
+    expect(getNeededPrefix([])).toBe('');
+  });
+
+  test('derives the next prefix from the current column', () => {
+    expect(getNeededPrefix(['moan'])).toBe('o');
+
+    expect(getNeededPrefix(['moan', 'once'])).toBe('ac');
+
+    expect(getNeededPrefix(['moan', 'once', 'acme'])).toBe('nee');
+  });
+
+  test('returns empty string once the 4×4 square is complete', () => {
+    expect(getNeededPrefix(['moan', 'once', 'acme', 'need'])).toBe('');
+  });
+});
