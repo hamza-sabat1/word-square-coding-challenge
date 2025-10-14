@@ -1,4 +1,4 @@
-const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix} = require('./wordSquare');
+const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix, squareIsValid} = require('./wordSquare');
 
 describe('Utility functions for cleaning input letters and generating frequency maps to count instances of letters', () => {
     test('normaliseLetters should convert input to lowercase and remove invalid characters', () => {
@@ -97,5 +97,31 @@ describe('getNeededPrefix', () => {
 
   test('returns empty string once the 4×4 square is complete', () => {
     expect(getNeededPrefix(['moan', 'once', 'acme', 'need'])).toBe('');
+  });
+});
+
+describe('squareIsValid', () => {
+  test('empty or single row is always valid so far', () => {
+    expect(squareIsValid([])).toBe(true);
+    expect(squareIsValid(['moan'])).toBe(true);
+  });
+
+  test('returns true when rows mirror columns so far- valid partial squares that are following the pattern)', () => {
+    expect(squareIsValid(['moan', 'once'])).toBe(true);
+    expect(squareIsValid(['moan', 'once', 'acme'])).toBe(true);
+    expect(squareIsValid(['base', 'area', 'seal'])).toBe(true);
+    expect(squareIsValid(['moan', 'once', 'acme', 'need'])).toBe(true);
+  });
+
+  test('returns false on a row/column mismatch', () => {
+    expect(squareIsValid(['pear', 'once'])).toBe(false);
+    expect(squareIsValid(['moan', 'once', 'amid'])).toBe(false);
+    expect(squareIsValid(['mars', 'oven'])).toBe(false);
+    expect(squareIsValid(['mead', 'earl', 'acid'])).toBe(false);
+    expect(squareIsValid(['abcd', 'efgh', 'ijkl'])).toBe(false);
+  });
+
+  test('returns true for a valid full 4×4 table', () => {
+    expect(squareIsValid(['moan', 'once', 'acme', 'need'])).toBe(true);
   });
 });

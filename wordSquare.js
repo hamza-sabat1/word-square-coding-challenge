@@ -52,6 +52,18 @@ function getNeededPrefix(rows) {
   return prefix;
 }
 
+function squareIsValid(rows) {
+  const n = rows.length;
+  if (n <= 1) return true;
+
+  for (let r = 0; r < n; r++) {
+    for (let c = 0; c < n; c++) {
+      if (rows[r][c] !== rows[c][r]) return false;
+    }
+  }
+  return true;
+}
+
 
 module.exports = {
   normaliseLetters,
@@ -59,4 +71,5 @@ module.exports = {
   wordFitsBag,
   filterValidWords,
   getNeededPrefix,
+  squareIsValid,
 };
