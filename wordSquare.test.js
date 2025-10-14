@@ -1,4 +1,4 @@
-const { normaliseLetters, makeLetterCounts, wordFitsBag } = require('./wordSquare');
+const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords,} = require('./wordSquare');
 
 describe('Utility functions for cleaning input letters and generating frequency maps to count instances of letters', () => {
     test('normaliseLetters should convert input to lowercase and remove invalid characters', () => {
@@ -38,6 +38,47 @@ describe('Word feasibility against a letter bag', () => {
   test('input is treated case insensitively via the normaliseLetters function utility', () => {
     const bag = makeLetterCounts('AabB');
     expect(wordFitsBag('BaB', bag)).toBe(true);
+  });
+});
+
+describe('Dictionary filtering to build candidate word set', () => {
+  test('includes only n-letter words that can be formed from the letter bag', () => {
+    const n = 4;
+    const bag = makeLetterCounts('aaccdeeeemmnnnoo');
+
+    const lines = [
+      'mean',   // ok
+      'once',   // ok
+      'neon',   // ok
+      'moan',   // ok
+      'zebra',  // reject
+      'x',      // reject
+      'm-e-a-n',// reject
+      'MEAN',   // ok
+      'stone',  // reject
+      'a e a n' // reject
+    ];
+
+    const result = filterValidWords(n, bag, lines);
+
+    expect(result).toEqual(expect.arrayContaining(['mean', 'once', 'neon', 'moan']));
+
+    expect(result).not.toEqual(expect.arrayContaining(['zebra', 'x', 'stone']));
+  });
+
+  test('returns empty array if nothing matches', () => {
+    const n = 3;
+    const bag = makeLetterCounts('abc');
+    const lines = ['dddd', 'eeee', 'aa', 'toolong'];
+    expect(filterValidWords(n, bag, lines)).toEqual([]);
+  });
+
+  test('normalises case and trims whitespace', () => {
+    const n = 4;
+    const bag = makeLetterCounts('aaccdeeeemmnnnoo');
+    const lines = ['  MEAN  ', '\tOnce\n'];
+    const result = filterValidWords(n, bag, lines);
+    expect(result).toEqual(expect.arrayContaining(['mean', 'once']));
   });
 });
 

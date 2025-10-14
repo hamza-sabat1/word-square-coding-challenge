@@ -20,8 +20,27 @@ function wordFitsBag (word, bag) {
   return true;
 }
 
+function filterValidWords(n, bag, lines) {
+  const out = [];
+  const seen = new Set();
+
+  for (const raw of lines) {
+    const w = normaliseLetters((raw || '').trim());
+    if (w.length !== n) continue;          
+    if (!/^[a-z]+$/.test(w)) continue;     
+    if (!wordFitsBag(w, bag)) continue;    
+    if (seen.has(w)) continue;             
+    seen.add(w);
+    out.push(w);
+  }
+
+  out.sort();
+  return out;
+}
+
 module.exports = {
   normaliseLetters,
   makeLetterCounts,
   wordFitsBag,
+  filterValidWords,
 };
