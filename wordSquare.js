@@ -64,6 +64,12 @@ function squareIsValid(rows) {
   return true;
 }
 
+function updateLetters(remaining, word, consume) {
+  const step = consume ? -1 : +1;
+  for (const ch of normaliseLetters(word)) {
+    remaining[ch] = (remaining[ch] || 0) + step;
+  }
+}
 
 module.exports = {
   normaliseLetters,
@@ -72,4 +78,5 @@ module.exports = {
   filterValidWords,
   getNeededPrefix,
   squareIsValid,
+  updateLetters,
 };

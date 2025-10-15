@@ -1,4 +1,4 @@
-const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix, squareIsValid} = require('./wordSquare');
+const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix, squareIsValid, updateLetters} = require('./wordSquare');
 
 describe('Utility functions for cleaning input letters and generating frequency maps to count instances of letters', () => {
     test('normaliseLetters should convert input to lowercase and remove invalid characters', () => {
@@ -123,5 +123,25 @@ describe('squareIsValid', () => {
 
   test('returns true for a valid full 4×4 table', () => {
     expect(squareIsValid(['moan', 'once', 'acme', 'need'])).toBe(true);
+  });
+});
+
+describe('remaining letter updates (consume & restore)', () => {
+  test('updateLetters consumes and restores letter counts correctly', () => {
+    const remaining = makeLetterCounts('aabbc');
+
+    updateLetters(remaining, 'cab', true);
+    expect(remaining).toEqual({ a:1, b:1, c:0 });
+
+    updateLetters(remaining, 'cab', false);
+    expect(remaining).toEqual({a:2, b:2, c:1});
+  });
+
+  test('wordFitsBag works against a live shrinking word bag of remaining letters', () => {
+    const remaining = makeLetterCounts('aabbc');
+    expect(wordFitsBag('cab', remaining)).toBe(true);
+    updateLetters(remaining, 'cab', true);    
+    expect(wordFitsBag('cab', remaining)).toBe(false);
+    expect(wordFitsBag('ab', remaining)).toBe(true);  
   });
 });
