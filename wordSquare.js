@@ -71,6 +71,33 @@ function updateLetters(remaining, word, consume) {
   }
 }
 
+function buildWordSquare(n, letters, validWords) {
+  const remaining = makeLetterCounts(letters);
+  const rows = [];
+
+  function backtrack() {
+    if (rows.length === n) return true;
+
+    const prefix = getNeededPrefix(rows);
+
+    for (const w of validWords) {
+      if (!w.startsWith(prefix)) continue;
+      if (!wordFitsBag(w, remaining)) continue;
+
+      updateLetters(remaining, w, true);
+      rows.push(w);
+
+      if (squareIsValid(rows) && backtrack()) return true;
+
+      rows.pop();
+      updateLetters(remaining, w, false);
+    }
+    return false;
+  }
+
+  return backtrack() ? rows : null;
+}
+
 module.exports = {
   normaliseLetters,
   makeLetterCounts,
@@ -79,4 +106,5 @@ module.exports = {
   getNeededPrefix,
   squareIsValid,
   updateLetters,
+  buildWordSquare,
 };

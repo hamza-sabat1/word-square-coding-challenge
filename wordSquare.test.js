@@ -1,4 +1,4 @@
-const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix, squareIsValid, updateLetters} = require('./wordSquare');
+const { normaliseLetters, makeLetterCounts, wordFitsBag, filterValidWords, getNeededPrefix, squareIsValid, updateLetters, buildWordSquare} = require('./wordSquare');
 
 describe('Utility functions for cleaning input letters and generating frequency maps to count instances of letters', () => {
     test('normaliseLetters should convert input to lowercase and remove invalid characters', () => {
@@ -143,5 +143,27 @@ describe('remaining letter updates (consume & restore)', () => {
     updateLetters(remaining, 'cab', true);    
     expect(wordFitsBag('cab', remaining)).toBe(false);
     expect(wordFitsBag('ab', remaining)).toBe(true);  
+  });
+});
+
+describe('buildWordSquare solver ensures that all functions are working end to end', () => {
+  test('finds the valid 4×4 square for the example', () => {
+    const n = 4;
+    const letters = 'moanonceacmeneed';
+    const dict = ['moan', 'once', 'acme', 'need'];
+    const bag = makeLetterCounts(letters);
+    const valid = filterValidWords(n, bag, dict);
+    const result = buildWordSquare(n, letters, valid);
+    expect(result).toEqual(['moan', 'once', 'acme', 'need']);
+  });
+
+  test('returns null when no square exists', () => {
+    const n = 3;
+    const letters = 'abcdefghi';
+    const dict = ['abc', 'def', 'ghi'];
+    const bag = makeLetterCounts(letters);
+    const valid = filterValidWords(n, bag, dict);
+    const result = buildWordSquare(n, letters, valid);
+    expect(result).toBeNull();
   });
 });
